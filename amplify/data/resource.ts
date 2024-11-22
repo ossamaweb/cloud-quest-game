@@ -11,10 +11,7 @@ const schema = a.schema({
     .model({
       content: a.string(),
     })
-    .authorization((allow) => [
-      allow.owner(),
-      allow.publicApiKey().to(["read"]),
-    ]),
+    .authorization((allow) => [allow.owner()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -22,11 +19,9 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
-    // API Key is used for a.allow.public() rules
-    apiKeyAuthorizationMode: {
-      expiresInDays: 30,
-    },
+    // This tells the data client in your app (generateClient())
+    // to sign API requests with the user authentication token.
+    defaultAuthorizationMode: "userPool",
   },
 });
 
